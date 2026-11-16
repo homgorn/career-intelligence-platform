@@ -31,6 +31,14 @@ architecture, roadmap                 execution telemetry, live ROI
 
 ### Вар-1. License split (open core) — рекомендация
 
+Разделение по путям, а не по файлам задним числом:
+
+| Артефакт | Лицензия | Когда |
+| --- | --- | --- |
+| Pre-BUSL (этот коммит и раньше) | MIT / CC BY для docs | неизменяемо |
+| Engine major versions (после принятия ADR-0002) | BUSL 1.1 | 4 года → Apache-2.0 |
+| Docs / skills / tools / CI | MIT / CC BY | бессрочно |
+
 - Сейчас: MIT на всё.
 - Предложение: перенести на BUSL 1.1 / BSL со сроком конвертации в Apache/MIT,
   и опубликовать **ядро решения** закрыто в продукт.
@@ -70,8 +78,10 @@ architecture, roadmap                 execution telemetry, live ROI
 
 ## Рекомендуемая связка
 
-1. **License**: BUSL на код «движка» (не на спецификации — они остаются
-   публичными и MIT/CC-BY). ADR + согласие владельца обязательно.
+1. **License**: BUSL на код движка (не на документы — они остаются открытыми).
+   Готовлю `ADR-0002-license-busl.md` (PROPOSED): двойная лицензия MIT для
+   docs/skills/tools/CI и BUSL 1.1 для будущего `engine/`. Принятие требует
+   legal review и подписи владельца.
 2. **Open gates**: оставить валидатор и skill-карточки; закрыть
    `engine/`, `policy-packs/`, `recipes/live/` и live-API.
 3. **Монетизация API**: metered доступ к engine; бесплатный уровень —
