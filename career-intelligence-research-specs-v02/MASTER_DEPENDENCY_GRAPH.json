@@ -1,0 +1,168 @@
+{
+  "P0": [
+    [
+      "TASK-P0-001",
+      "Choose ICP + profession + measurable workflow",
+      []
+    ],
+    [
+      "TASK-P0-002",
+      "Define domain entities and WorkRecipe",
+      [
+        "TASK-P0-001"
+      ]
+    ],
+    [
+      "TASK-P0-003",
+      "Implement profile/task/workflow core",
+      [
+        "TASK-P0-002"
+      ]
+    ],
+    [
+      "TASK-P0-004",
+      "Implement recommendation + evidence + policy gates",
+      [
+        "TASK-P0-003"
+      ]
+    ],
+    [
+      "TASK-P0-005",
+      "Implement first guided WorkRecipe",
+      [
+        "TASK-P0-004"
+      ]
+    ],
+    [
+      "TASK-P0-006",
+      "Implement outcome measurement",
+      [
+        "TASK-P0-005"
+      ]
+    ],
+    [
+      "TASK-P0-007",
+      "Ship website + onboarding + analytics",
+      [
+        "TASK-P0-003"
+      ]
+    ],
+    [
+      "TASK-P0-008",
+      "Launch acquisition/content experiment",
+      [
+        "TASK-P0-007"
+      ]
+    ],
+    [
+      "TASK-P0-009",
+      "P0 value gate review",
+      [
+        "TASK-P0-006",
+        "TASK-P0-008"
+      ]
+    ]
+  ],
+  "P1": [
+    [
+      "TASK-P1-001",
+      "Expand recipe library and taxonomy",
+      [
+        "TASK-P0-009"
+      ]
+    ],
+    [
+      "TASK-P1-002",
+      "Tool/plugin registry + adapters",
+      [
+        "TASK-P0-009"
+      ]
+    ],
+    [
+      "TASK-P1-003",
+      "Learning and implementation packages",
+      [
+        "TASK-P1-001"
+      ]
+    ],
+    [
+      "TASK-P1-004",
+      "B2B diagnostic + team transformation",
+      [
+        "TASK-P0-009"
+      ]
+    ],
+    [
+      "TASK-P1-005",
+      "Partner/affiliate program",
+      [
+        "TASK-P0-008"
+      ]
+    ],
+    [
+      "TASK-P1-006",
+      "SEO/content scale system",
+      [
+        "TASK-P0-008",
+        "TASK-P1-001"
+      ]
+    ],
+    [
+      "TASK-P1-007",
+      "Evaluation/observability platform",
+      [
+        "TASK-P0-004"
+      ]
+    ],
+    [
+      "TASK-P1-008",
+      "Marketplace pilot",
+      [
+        "TASK-P1-001",
+        "TASK-P1-003"
+      ]
+    ]
+  ],
+  "P2": [
+    [
+      "TASK-P2-001",
+      "Knowledge graph + outcome intelligence",
+      [
+        "TASK-P1-001",
+        "TASK-P1-007"
+      ]
+    ],
+    [
+      "TASK-P2-002",
+      "Agent runtime + MCP integrations",
+      [
+        "TASK-P1-002",
+        "TASK-P1-007"
+      ]
+    ],
+    [
+      "TASK-P2-003",
+      "Managed AI service",
+      [
+        "TASK-P1-003",
+        "TASK-P1-008"
+      ]
+    ],
+    [
+      "TASK-P2-004",
+      "Enterprise governance + procurement pack",
+      [
+        "TASK-P1-004",
+        "TASK-P1-007"
+      ]
+    ],
+    [
+      "TASK-P2-005",
+      "Data moat and benchmark network",
+      [
+        "TASK-P2-001",
+        "TASK-P2-002"
+      ]
+    ]
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "stage": "STAGE-09",
+  "depends_on": ["STAGE-02"],
+  "inputs": ["docs/architecture/PILOT_DECISION.md"],
+  "outputs": [
+    "docs/gates/SECURITY_GATE.md",
+    "docs/gates/PRIVACY_GATE.md",
+    "docs/gates/LEGAL_GATE.md"
+  ],
+  "checks": [
+    {"kind": "sections_present", "path": "docs/gates/SECURITY_GATE.md", "headings": ["## Findings"]},
+    {"kind": "sections_present", "path": "docs/gates/LEGAL_GATE.md", "headings": ["## Legal review trigger"]},
+    {"kind": "manual", "note": "severity, evidence, risk, fix, test, status по каждому finding — проверять глазами"}
+  ]
+}

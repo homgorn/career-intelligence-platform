@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-05",
+  "depends_on": ["STAGE-04"],
+  "inputs": ["docs/contracts/domain/DATA-MODEL-P0.md"],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "шесть обязательных тестов recommendation engine, включая тест non-AI побеждает AI"}
+  ]
+}

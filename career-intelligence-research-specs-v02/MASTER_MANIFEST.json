@@ -1,0 +1,51 @@
+{
+  "project": "Career Intelligence / AI Profession Intelligence",
+  "version": "master-2026-11-15",
+  "principle": "customer_outcome_first",
+  "layers": [
+    "career_intelligence",
+    "work_intelligence",
+    "ai_transformation",
+    "ai_enablement",
+    "implementation",
+    "governance",
+    "outcome_intelligence",
+    "opportunity_creation",
+    "growth",
+    "enterprise"
+  ],
+  "execution": {
+    "priority_order": [
+      "P0",
+      "P1",
+      "P2"
+    ],
+    "unit": "work_recipe"
+  },
+  "gates": [
+    "customer_value",
+    "evidence",
+    "safety",
+    "security",
+    "legal",
+    "economics",
+    "operations",
+    "evaluation"
+  ],
+  "contexts": [
+    "identity",
+    "career",
+    "work",
+    "ai",
+    "tools",
+    "learning",
+    "implementation",
+    "outcomes",
+    "knowledge",
+    "governance",
+    "marketplace",
+    "growth",
+    "billing",
+    "support"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "stage": "STAGE-03",
+  "depends_on": ["STAGE-02"],
+  "inputs": [
+    "docs/contracts/api/API-FOUNDATION.md",
+    "docs/decisions/ADR-0002-stack-and-pilot.md"
+  ],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "фундамент — это код: тесты, миграции, tenant isolation, auth, secrets, observability. Валидатор не запускает продуктовые тесты."}
+  ]
+}

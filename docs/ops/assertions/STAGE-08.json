@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-08",
+  "depends_on": ["STAGE-04", "STAGE-05"],
+  "inputs": ["docs/contracts/events/EVENT-CATALOG.md"],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "vertical slice, три режима, accessibility, consent до интеграций — проверяется человеком и E2E"}
+  ]
+}

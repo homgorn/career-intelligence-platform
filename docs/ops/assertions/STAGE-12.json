@@ -1,0 +1,17 @@
+{
+  "stage": "STAGE-12",
+  "depends_on": ["STAGE-11"],
+  "inputs": [
+    "docs/architecture/PILOT_DECISION.md",
+    "docs/gates/SECURITY_GATE.md",
+    "docs/gates/PRIVACY_GATE.md",
+    "docs/gates/LEGAL_GATE.md"
+  ],
+  "outputs": [
+    "docs/gates/RELEASE-GATE-P0.md"
+  ],
+  "checks": [
+    {"kind": "gate_status", "path": "docs/gates/RELEASE-GATE-P0.md"},
+    {"kind": "sections_present", "path": "docs/gates/RELEASE-GATE-P0.md", "headings": ["CUSTOMER VALUE", "ECONOMICS", "BLOCKERS"]}
+  ]
+}

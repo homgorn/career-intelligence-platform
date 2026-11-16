@@ -1,0 +1,14 @@
+{
+  "stage": "STAGE-01",
+  "depends_on": ["STAGE-00"],
+  "inputs": [
+    "docs/architecture/P0_SCOPE.md",
+    "docs/architecture/ARCHITECTURE_RISKS.md",
+    "docs/specs/SPEC_INDEX.md"
+  ],
+  "outputs": ["docs/architecture/ARCHITECTURE_READINESS_REVIEW.md"],
+  "checks": [
+    {"kind": "sections_present", "path": "docs/architecture/ARCHITECTURE_READINESS_REVIEW.md", "headings": ["Blocking issues", "Non-blocking issues"]},
+    {"kind": "manual", "note": "блокирующие проблемы не должны быть приняты молча — проверить глазами"}
+  ]
+}

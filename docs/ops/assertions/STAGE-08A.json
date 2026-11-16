@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-08A",
+  "depends_on": ["STAGE-08"],
+  "inputs": ["docs/architecture/PILOT_DECISION.md"],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "10–30 связанных с WorkRecipe страниц, один канал, первые метрики трафика"}
+  ]
+}

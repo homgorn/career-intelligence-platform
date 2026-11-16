@@ -1,0 +1,18 @@
+{
+  "stage": "STAGE-04",
+  "depends_on": ["STAGE-03"],
+  "inputs": [
+    "docs/contracts/domain/DATA-MODEL-P0.md",
+    "docs/contracts/events/EVENT-CATALOG.md"
+  ],
+  "outputs": [
+    "docs/contracts/domain/DATA-MODEL-P0.md"
+  ],
+  "checks": [
+    {"kind": "terms_present", "path": "docs/contracts/domain/DATA-MODEL-P0.md", "terms": [
+      "Person", "Tenant", "CareerProfile", "AIProfile", "Goal", "Occupation",
+      "Skill", "Task", "Workflow", "WorkRecipe", "Tool", "Recommendation",
+      "Evidence", "Outcome", "Source", "Consent", "PolicyDecision", "AuditEvent"
+    ]}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "stage": "STAGE-02",
+  "depends_on": ["STAGE-00A"],
+  "inputs": [
+    "docs/architecture/PILOT_DECISION.md",
+    "career-intelligence-research-specs-v02/IDE_TASK_TEMPLATE.json",
+    "career-intelligence-research-specs-v02/MASTER_DEPENDENCY_GRAPH.json"
+  ],
+  "outputs": [
+    "docs/contracts/events/EVENT-CATALOG.md",
+    "docs/contracts/domain/DATA-MODEL-P0.md",
+    "docs/contracts/api/API-FOUNDATION.md",
+    "docs/decisions/ADR-0003-data-model-canonical.md",
+    "docs/decisions/ADR-0004-event-catalog.md",
+    "docs/tasks/MASTER_BACKLOG.json",
+    "docs/tasks/NEXT_TASK.md"
+  ],
+  "checks": [
+    {"kind": "canonical_events", "path": "docs/contracts/events/EVENT-CATALOG.md"},
+    {"kind": "nonempty_field", "path": "docs/tasks/MASTER_BACKLOG.json", "pointer": "tasks[*].customer_value"},
+    {"kind": "nonempty_field", "path": "docs/tasks/MASTER_BACKLOG.json", "pointer": "tasks[*].acceptance_criteria"},
+    {"kind": "nonempty_field", "path": "docs/tasks/MASTER_BACKLOG.json", "pointer": "tasks[*].spec_refs"},
+    {"kind": "next_task_single"}
+  ]
+}

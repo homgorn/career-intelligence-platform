@@ -1,0 +1,19 @@
+{
+  "task_id": "TASK-XXXX",
+  "title": "",
+  "objective": "",
+  "customer_value": "",
+  "priority": "P0|P1|P2",
+  "dependencies": [],
+  "required_skills": [],
+  "recommended_plugins": [],
+  "inputs": [],
+  "outputs": [],
+  "acceptance_criteria": [],
+  "security": [],
+  "legal_trigger": "",
+  "analytics": [],
+  "tests": [],
+  "rollback": "",
+  "definition_of_done": []
+}

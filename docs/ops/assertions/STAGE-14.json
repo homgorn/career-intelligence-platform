@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-14",
+  "depends_on": ["STAGE-13"],
+  "inputs": ["docs/tasks/NEXT_TASK.md"],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "реализация задачи: тесты, security check, analytics check — по карточке задачи"}
+  ]
+}

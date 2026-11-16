@@ -1,0 +1,24 @@
+{
+  "stage": "STAGE-00",
+  "depends_on": [],
+  "inputs": [
+    "career-intelligence-research-specs-v02",
+    "AGENTS.md",
+    "docs/ops/RUNBOOK.md"
+  ],
+  "outputs": [
+    "docs/specs/SPEC_INDEX.md",
+    "docs/architecture/MASTER_ARCHITECTURE_MAP.md",
+    "docs/architecture/DEPENDENCY_MAP.md",
+    "docs/architecture/P0_SCOPE.md",
+    "docs/architecture/ARCHITECTURE_RISKS.md",
+    "docs/architecture/GLOSSARY.md",
+    "docs/decisions/ADR-0001-project-architecture.md"
+  ],
+  "checks": [
+    {"kind": "spec_index_mentions_all"},
+    {"kind": "sections_present", "path": "docs/specs/SPEC_INDEX.md", "headings": ["## Конфликты, требующие ADR"]},
+    {"kind": "terms_present", "path": "docs/architecture/GLOSSARY.md", "terms": ["WorkRecipe", "NON_AI", "PolicyDecision"]},
+    {"kind": "sections_present", "path": "docs/architecture/P0_SCOPE.md", "headings": ["P0 REQUIRED", "P1 DEFERRED", "P2 DEFERRED"]}
+  ]
+}

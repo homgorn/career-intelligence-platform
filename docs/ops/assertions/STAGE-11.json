@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-11",
+  "depends_on": ["STAGE-05", "STAGE-08", "STAGE-10"],
+  "inputs": ["docs/contracts/events/EVENT-CATALOG.md"],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "13 доказательств E2E и цепочка событий — валидатор не запускает E2E"}
+  ]
+}

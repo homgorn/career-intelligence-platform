@@ -1,0 +1,13 @@
+# Храним переводы строк как LF, чтобы генераторы и CI давали одинаковый результат.
+* text=auto eol=lf
+
+# Бинарные файлы
+*.7z binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.zip binary
+*.woff binary
+*.woff2 binary

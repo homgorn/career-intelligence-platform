@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-07",
+  "depends_on": ["STAGE-02"],
+  "inputs": [],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "DEFERRED_P2: запускать только после release gate P1 и стабилизации data model"}
+  ]
+}

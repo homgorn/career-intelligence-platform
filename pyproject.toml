@@ -1,0 +1,52 @@
+[project]
+name = "career-intelligence-platform"
+version = "0.1.0"
+description = "Spec-driven platform and execution runbook for Career Intelligence / AI Profession Intelligence"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+keywords = [
+    "career-intelligence",
+    "spec-driven-development",
+    "agentic-workflow",
+    "ai-governance",
+    "documentation-as-code",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Quality Assurance",
+]
+# Инструменты проекта используют только стандартную библиотеку.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[project.urls]
+Documentation = "https://github.com/homgorn/career-intelligence-platform#readme"
+Issues = "https://github.com/homgorn/career-intelligence-platform/issues"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "career-intelligence-research-specs-v02"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tools/tests/*" = ["E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tools/tests"]
+pythonpath = ["tools"]
+addopts = "-q --strict-markers"

@@ -1,0 +1,17 @@
+{
+  "stage": "STAGE-00A",
+  "depends_on": ["STAGE-00"],
+  "inputs": [
+    "docs/architecture/P0_SCOPE.md",
+    "docs/architecture/ARCHITECTURE_RISKS.md"
+  ],
+  "outputs": [
+    "docs/architecture/PILOT_DECISION.md",
+    "docs/decisions/ADR-0002-stack-and-pilot.md"
+  ],
+  "checks": [
+    {"kind": "human_signed", "path": "docs/architecture/PILOT_DECISION.md"},
+    {"kind": "sections_present", "path": "docs/architecture/PILOT_DECISION.md", "headings": ["## Решение", "## Пороги P0 gate", "## Подпись"]},
+    {"kind": "terms_present", "path": "docs/architecture/PILOT_DECISION.md", "terms": ["ICP", "Workflow", "Страна", "Baseline", "Outcome"]}
+  ]
+}

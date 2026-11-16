@@ -1,0 +1,24 @@
+{
+  "stage": "ALWAYS",
+  "depends_on": [],
+  "inputs": [
+    "AGENTS.md",
+    "docs/ops/RUNBOOK.md",
+    "docs/README.md",
+    "docs/specs/SPEC_INDEX.md"
+  ],
+  "outputs": [],
+  "checks": [
+    {"kind": "dir_exists", "path": "career-intelligence-research-specs-v02"},
+    {"kind": "tsv_rows_min", "path": "docs/specs/SPEC_INDEX_DATA.tsv", "min": 109},
+    {"kind": "archive_hashes"},
+    {"kind": "json_valid", "path": "docs/tasks/MASTER_BACKLOG.json"},
+    {"kind": "deps_exist"},
+    {"kind": "deps_acyclic"},
+    {"kind": "file_exists", "path": "docs/architecture/GLOSSARY.md"},
+    {"kind": "file_exists", "path": "tools/runbook_validate.py"},
+    {"kind": "file_exists", "path": "tools/runbook_next.py"},
+    {"kind": "file_exists", "path": "tools/gen_spec_index.py"},
+    {"kind": "json_valid", "path": "docs/specs/SPEC_STATUS.json"}
+  ]
+}

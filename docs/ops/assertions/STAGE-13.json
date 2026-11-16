@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-13",
+  "depends_on": [],
+  "inputs": ["docs/tasks/MASTER_BACKLOG.json"],
+  "outputs": ["docs/tasks/NEXT_TASK.md"],
+  "checks": [
+    {"kind": "next_task_single"}
+  ]
+}

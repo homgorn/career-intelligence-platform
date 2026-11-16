@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-06",
+  "depends_on": ["STAGE-05A"],
+  "inputs": ["docs/gates/LLM_DECISION.md"],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "семь обязательных тестов LLM/RAG, включая prompt injection и tenant leakage"}
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "stage": "STAGE-05A",
+  "depends_on": ["STAGE-05"],
+  "inputs": ["docs/architecture/PILOT_DECISION.md"],
+  "outputs": ["docs/gates/LLM_DECISION.md"],
+  "checks": [
+    {"kind": "terms_present", "path": "docs/gates/LLM_DECISION.md", "terms": ["LLM_REQUIRED", "LLM_DEFERRED", "LLM_PARTIAL"]},
+    {"kind": "manual", "note": "вердикт подтверждает человек; при LLM_REQUIRED нужны доступы и бюджет"}
+  ]
+}

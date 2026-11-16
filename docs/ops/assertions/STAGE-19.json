@@ -1,0 +1,10 @@
+{
+  "stage": "STAGE-19",
+  "depends_on": [],
+  "inputs": ["docs/gates/RELEASE-GATE-P2.md"],
+  "outputs": ["docs/gates/PRODUCTION-GATE.md"],
+  "checks": [
+    {"kind": "gate_status", "path": "docs/gates/PRODUCTION-GATE.md"},
+    {"kind": "manual", "note": "31 слой проверяет человек; главный вопрос — может ли пользователь получить пользу без разработчика"}
+  ]
+}

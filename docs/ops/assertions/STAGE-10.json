@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-10",
+  "depends_on": ["STAGE-02", "STAGE-08"],
+  "inputs": ["docs/contracts/events/EVENT-CATALOG.md"],
+  "outputs": [],
+  "checks": [
+    {"kind": "manual", "note": "метрики считаются из замороженного каталога; cost per verified outcome и north-star по outcome"}
+  ]
+}

@@ -1,0 +1,24 @@
+stage_id,name,former_prompt,archive_task,depends_on,gate,status
+STAGE-00,Audit,PROMPT 00,-,-,stage,pending
+STAGE-00A,Pilot decision,HUMAN-new,TASK-P0-001,STAGE-00,stage+human-signature,pending
+STAGE-01,Readiness review,PROMPT 01,-,STAGE-00;STAGE-00A,stage,pending
+STAGE-02,Contracts and backlog,PROMPT 02,TASK-P0-002,STAGE-00A,stage,pending
+STAGE-03,Foundation,PROMPT 03,-,STAGE-02,stage,pending
+STAGE-04,Domain and data,PROMPT 04,TASK-P0-002;TASK-P0-003,STAGE-03,stage,pending
+STAGE-05,Recommendation engine,PROMPT 05,TASK-P0-004,STAGE-04,stage,pending
+STAGE-05A,LLM necessity gate,new,-,STAGE-05,stage,pending
+STAGE-06,LLM RAG wiki,PROMPT 06,-,STAGE-05A-conditional,stage,deferred-until-05A
+STAGE-07,Knowledge graph,PROMPT 07,P2,STAGE-02,release P2,deferred-P2
+STAGE-08,Website and onboarding,PROMPT 08,TASK-P0-007,STAGE-04;STAGE-05,stage,pending
+STAGE-08A,Distribution MVP,new-from-PROMPT-16,TASK-P0-008,STAGE-08,stage,pending
+STAGE-09,Security privacy legal,PROMPT 09,-,STAGE-02-design;STAGE-11-implementation,stage,pending
+STAGE-10,Analytics and outcome,PROMPT 10,TASK-P0-006,STAGE-02;STAGE-08,stage,pending
+STAGE-11,Vertical slice E2E,PROMPT 11,TASK-P0-003;TASK-P0-004;TASK-P0-005;TASK-P0-006,STAGE-05;STAGE-08;STAGE-10,stage,pending
+STAGE-12,P0 value gate,PROMPT 12,TASK-P0-009,STAGE-11,release P0,pending
+STAGE-13,Next task selector,PROMPT 13,recurring,after-each-task,-,pending
+STAGE-14,Task executor,universal-executor,recurring,after-STAGE-13,stage,pending
+STAGE-15,Health check,PROMPT 14,recurring,objective-trigger,stage,pending
+STAGE-16,B2B layer,PROMPT 15,TASK-P1-004,release-P1,release P1,pending
+STAGE-17,SEO and growth,PROMPT 16,TASK-P1-006,release-P1,release P1,pending
+STAGE-18,Tool plugin registry,PROMPT 17,TASK-P1-002,release-P1,release P1,pending
+STAGE-19,Production readiness,PROMPT 18,release-gate,release-P2,production,pending

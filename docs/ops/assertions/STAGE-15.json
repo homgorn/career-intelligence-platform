@@ -1,0 +1,9 @@
+{
+  "stage": "STAGE-15",
+  "depends_on": [],
+  "inputs": ["docs/tasks/MASTER_BACKLOG.json", "docs/specs/SPEC_INDEX.md"],
+  "outputs": ["docs/architecture/HEALTH-CHECK.md"],
+  "checks": [
+    {"kind": "sections_present", "path": "docs/architecture/HEALTH-CHECK.md", "headings": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]}
+  ]
+}
