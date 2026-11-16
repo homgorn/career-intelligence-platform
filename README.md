@@ -7,10 +7,14 @@ every decision has a version, and no stage advances without passing a gate.**
 
 [English](README.md) · [Русский](README.ru.md)
 
-[![CI](https://github.com/homgorn/career-intelligence-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/homgorn/career-intelligence-platform/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 [![Spec integrity](https://img.shields.io/badge/spec%20archive-109%20files%20hashed-blue.svg)](docs/specs/SPEC_INDEX.md)
+
+> GitHub Actions is currently unavailable for this repository: the job is not
+> started because the account is locked due to a billing issue. All checks below
+> run locally and must pass before merging; CI will be re-enabled after billing
+> is restored.
 
 </div>
 

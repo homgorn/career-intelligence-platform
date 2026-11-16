@@ -7,10 +7,13 @@
 
 [English](README.md) · [Русский](README.ru.md)
 
-[![CI](https://github.com/homgorn/career-intelligence-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/homgorn/career-intelligence-platform/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 [![Spec integrity](https://img.shields.io/badge/spec%20archive-109%20files%20hashed-blue.svg)](docs/specs/SPEC_INDEX.md)
+
+> GitHub Actions сейчас недоступен для репозитория: job не запускается, потому что
+> аккаунт заблокирован из-за проблемы с биллингом. Все проверки проходят локально
+> и обязательны перед merge; CI будет включён после восстановления биллинга.
 
 </div>
 
