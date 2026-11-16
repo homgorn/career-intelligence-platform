@@ -23,24 +23,11 @@ inside the scope of a declared stage.
 
 ## Before you open a PR
 
-Every PR must be signed off with the Developer Certificate of Origin (DCO):
-
 ```bash
-git commit --signoff
-```
-
-PRs without `Signed-off-by:` in every commit cannot be merged.
-By signing off you certify that you wrote the contribution, or have the
-right to submit it under the license that applies to the touched path
-(see `LICENSE-MAP.md`).
-
-```bash
-pip install ruff pytest
-ruff check tools
-ruff format --check tools
-pytest tools/tests
+python tools/check.py            # одна команда: ruff, формат, pytest,
+                                 # diff индекса спецификаций, stage gates
+python tools/check.py --quick    # без регенерации индекса и STAGE-00
 python tools/runbook_validate.py --stage STAGE-XX
-python tools/gen_spec_index.py && git diff --exit-code -- docs/specs/
 ```
 
 CI runs exactly these checks. A red CI means the change is not ready.

@@ -111,7 +111,16 @@ python tools/runbook_next.py                # which task is next, and why
 python tools/gen_spec_index.py              # regenerate the spec index
 ```
 
-Local checks used by CI:
+One-command local check ("everything"):
+
+```bash
+python tools/check.py            # JSON/CSV integrity, ruff, format, tests,
+                                 # spec-index diff, stage gates, selector
+python tools/check.py --quick    # skip index regeneration + STAGE-00 gate
+python tools/check.py --json
+```
+
+Or individually, same as CI:
 
 ```bash
 pip install ruff pytest
@@ -229,18 +238,6 @@ request, no public contract changes without an ADR, and `ruff check` +
 verbatim, must not be extracted, edited or deleted until it is explicitly
 released, and it is not part of the P0 specification surface.
 
-## License / Лицензия
+## License
 
-Dual licensing, per [`LICENSE-MAP.md`](LICENSE-MAP.md):
-
-- `career-intelligence-research-specs-v02/` and `docs/` — CC BY 4.0 ([`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt))
-- `skills/`, `tools/`, `.github/`, `README*`, root `LICENSE` — MIT
-- future `engine/`, policy packs, live recipes, verification runtime — BUSL 1.1 ([`LICENSES/BUSL-1.1.txt`](LICENSES/BUSL-1.1.txt))
-
-BUSL terms: production use permitted for your own products; hosted services and
-competing products based on the licensed work require a commercial license.
-Change Date: 2 years per release → GPL-3.0-or-later. All code published
-before adoption (through commit `bc50614`) remains MIT.
-
-The monetization strategy under owner review:
-[docs/architecture/MONETIZATION_STRATEGY.md](docs/architecture/MONETIZATION_STRATEGY.md).
+MIT — see [LICENSE](LICENSE). Published history stays MIT.

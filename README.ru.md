@@ -110,7 +110,16 @@ python tools/runbook_next.py                # какая задача следу
 python tools/gen_spec_index.py              # перегенерировать индекс спецификаций
 ```
 
-Локальные проверки, те же, что и в CI:
+Одна команда «всё локально»:
+
+```bash
+python tools/check.py            # JSON/CSV, ruff, формат, тесты,
+                                 # diff индекса, stage-гейты, селектор
+python tools/check.py --quick    # пропустить перегенерацию индекса и STAGE-00
+python tools/check.py --json
+```
+
+Или по отдельности, как в CI:
 
 ```bash
 pip install ruff pytest
@@ -231,18 +240,4 @@ Gate: P0=None P1=None P2=None
 
 ## Лицензия
 
-Двойное лицензирование, см. [`LICENSE-MAP.md`](LICENSE-MAP.md):
-
-- `career-intelligence-research-specs-v02/` и `docs/` — CC BY 4.0
-  ([`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt))
-- `skills/`, `tools/`, `.github/`, `README*`, корневой `LICENSE` — MIT
-- будущий `engine/`, policy packs, live recipes, verification runtime — BUSL 1.1
-  ([`LICENSES/BUSL-1.1.txt`](LICENSES/BUSL-1.1.txt))
-
-Условия BUSL: производственное использование для собственных продуктов разрешено;
-hosted-сервисы и конкурирующие продукты на базе лицензируемой работы требуют
-коммерческой лицензии. Дата изменения: 2 года на релиз → GPL-3.0-or-later.
-Весь код, опубликованный до принятия (до коммита `bc50614`), остаётся MIT.
-
-Стратегия монетизации на рассмотрении владельца:
-[docs/architecture/MONETIZATION_STRATEGY.md](docs/architecture/MONETIZATION_STRATEGY.md).
+MIT — см. [LICENSE](LICENSE). Опубликованная история остаётся MIT.
