@@ -36,7 +36,7 @@ architecture, roadmap                 execution telemetry, live ROI
 | Артефакт | Лицензия | Когда |
 | --- | --- | --- |
 | Pre-BUSL (этот коммит и раньше) | MIT / CC BY для docs | неизменяемо |
-| Engine major versions (после принятия ADR-0002) | BUSL 1.1 | 4 года → Apache-2.0 |
+| Engine major versions (после принятия ADR-0002) | BUSL 1.1 | 2 года от даты релиза → Apache-2.0 |
 | Docs / skills / tools / CI | MIT / CC BY | бессрочно |
 
 - Сейчас: MIT на всё.
