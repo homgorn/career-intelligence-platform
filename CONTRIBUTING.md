@@ -23,6 +23,17 @@ inside the scope of a declared stage.
 
 ## Before you open a PR
 
+Every PR must be signed off with the Developer Certificate of Origin (DCO):
+
+```bash
+git commit --signoff
+```
+
+PRs without `Signed-off-by:` in every commit cannot be merged.
+By signing off you certify that you wrote the contribution, or have the
+right to submit it under the license that applies to the touched path
+(see `LICENSE-MAP.md`).
+
 ```bash
 pip install ruff pytest
 ruff check tools

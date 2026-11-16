@@ -1,9 +1,9 @@
 ---
 doc_type: strategy
-status: PROPOSED
+status: ADOPTED (license split per ADR-0002 ACCEPTED 2026-11-16)
 author: architecture
 date: 2026-11-16
-decision_required_by: owner
+decision_required_by: owner (pricing, API tiers, operator)
 ---
 
 # Monetization strategy — PROPOSAL

@@ -8,6 +8,7 @@
 | Дата | Этап / задача | Статус | Артефакты | Тесты | Комментарий |
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-15 | STAGE-00 Audit | AWAITING_HUMAN | `SPEC_INDEX.md`, `SPEC_INDEX_DATA.tsv`, `MASTER_ARCHITECTURE_MAP.md`, `DEPENDENCY_MAP.md`, `P0_SCOPE.md`, `ARCHITECTURE_RISKS.md`, `ADR-0001` | `python tools/runbook_validate.py --stage STAGE-00` → PASS | Инвентаризировано 109 файлов; 8 конфликтов зафиксировано; ждёт подтверждения человека |
+| 2026-11-16 | Лицензирование | ACCEPTED | `LICENSE-MAP.md`, `LICENSES/`, ADR-0002 (ACCEPTED), CONTRIBUTING DCO | docs-only change; legal review TRIGGERED, not performed | Владелец подтвердил «делай ок»; Change License → GPL-3.0-or-later (BUSL covenant); legal review обязателен до первого BUSL-файла |
 
 ## Статусы
 
