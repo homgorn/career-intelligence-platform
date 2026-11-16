@@ -227,4 +227,6 @@ released, and it is not part of the P0 specification surface.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE). A proposed monetization strategy
+(open core + premium API) is under owner review in
+[docs/architecture/MONETIZATION_STRATEGY.md](docs/architecture/MONETIZATION_STRATEGY.md).

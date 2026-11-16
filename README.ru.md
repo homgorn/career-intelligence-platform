@@ -228,4 +228,6 @@ Gate: P0=None P1=None P2=None
 
 ## Лицензия
 
-MIT — см. [LICENSE](LICENSE).
+MIT — см. [LICENSE](LICENSE). Предлагаемая модель монетизации
+(open core + платный API) на рассмотрении владельца —
+[docs/architecture/MONETIZATION_STRATEGY.md](docs/architecture/MONETIZATION_STRATEGY.md).
