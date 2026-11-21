@@ -17,8 +17,41 @@
   ],
   "checks": [
     {"kind": "spec_index_mentions_all"},
-    {"kind": "sections_present", "path": "docs/specs/SPEC_INDEX.md", "headings": ["## Конфликты, требующие ADR"]},
-    {"kind": "terms_present", "path": "docs/architecture/GLOSSARY.md", "terms": ["WorkRecipe", "NON_AI", "PolicyDecision"]},
-    {"kind": "sections_present", "path": "docs/architecture/P0_SCOPE.md", "headings": ["P0 REQUIRED", "P1 DEFERRED", "P2 DEFERRED"]}
+    {
+      "kind": "sections_present",
+      "path": "docs/specs/SPEC_INDEX.md",
+      "headings": ["## Статусы", "## Конфликты, требующие ADR", "## Исключенные материалы"]
+    },
+    {
+      "kind": "terms_present",
+      "path": "docs/architecture/GLOSSARY.md",
+      "terms": ["WorkRecipe", "NON_AI", "PolicyDecision", "Provenance"]
+    },
+    {
+      "kind": "sections_present",
+      "path": "docs/architecture/P0_SCOPE.md",
+      "headings": ["P0 REQUIRED", "P1 DEFERRED", "P2 DEFERRED"]
+    },
+    {
+      "kind": "terms_present",
+      "path": "docs/architecture/MASTER_ARCHITECTURE_MAP.md",
+      "terms": [
+        "Career Intelligence",
+        "Work Intelligence",
+        "AI Transformation",
+        "Recommendation Engine",
+        "Outcomes",
+        "Identity & Tenancy",
+        "Knowledge & Research"
+      ]
+    },
+    {
+      "kind": "min_occurrences",
+      "path": "docs/architecture/ARCHITECTURE_RISKS.md",
+      "pattern": "^\\|\\s*R-\\d+",
+      "min": 16
+    },
+    {"kind": "frontmatter_equals", "path": "docs/decisions/ADR-0001-project-architecture.md", "field": "status", "equals": "ACCEPTED"},
+    {"kind": "terms_present", "path": "docs/decisions/ADR-0001-project-architecture.md", "terms": ["## Решения", "## Откат"]}
   ]
 }

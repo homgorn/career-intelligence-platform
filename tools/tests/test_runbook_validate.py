@@ -408,6 +408,62 @@ def test_markdown_links_resolve_ignores_links_in_code(ctx):
     assert "проверено ссылок: 0" in detail
 
 
+def test_min_occurrences_counts_matches(ctx):
+    write(ctx.path("risks.md"), "| R-01 | a |\n| R-02 | b |\n")
+    status, detail = rv.check_min_occurrences(
+        ctx, {"path": "risks.md", "pattern": r"^\|\s*R-\d+", "min": 2}
+    )
+    assert status == rv.PASS, detail
+
+    status, detail = rv.check_min_occurrences(
+        ctx, {"path": "risks.md", "pattern": r"^\|\s*R-\d+", "min": 3}
+    )
+    assert status == rv.FAIL
+    assert "2" in detail
+
+
+def test_min_occurrences_rejects_bad_regex(ctx):
+    write(ctx.path("a.md"), "x")
+    status, detail = rv.check_min_occurrences(ctx, {"path": "a.md", "pattern": "([", "min": 1})
+    assert status == rv.FAIL
+    assert "шаблон" in detail
+
+
+def test_frontmatter_equals_pass(ctx):
+    write(ctx.path("adr.md"), "---\nstatus: ACCEPTED\n---\n\ntext\n")
+    status, detail = rv.check_frontmatter_equals(
+        ctx, {"path": "adr.md", "field": "status", "equals": "ACCEPTED"}
+    )
+    assert status == rv.PASS, detail
+
+
+def test_frontmatter_equals_mismatch(ctx):
+    write(ctx.path("adr.md"), "---\nstatus: PROPOSED\n---\n")
+    status, detail = rv.check_frontmatter_equals(
+        ctx, {"path": "adr.md", "field": "status", "equals": "ACCEPTED"}
+    )
+    assert status == rv.FAIL
+    assert "PROPOSED" in detail
+
+
+def test_frontmatter_equals_missing_field_and_block(ctx):
+    write(ctx.path("a.md"), "---\ntitle: x\n---\n")
+    assert (
+        rv.check_frontmatter_equals(ctx, {"path": "a.md", "field": "status", "equals": "ACCEPTED"})[
+            0
+        ]
+        == rv.FAIL
+    )
+
+    write(ctx.path("b.md"), "нет frontmatter\n")
+    assert (
+        rv.check_frontmatter_equals(ctx, {"path": "b.md", "field": "status", "equals": "ACCEPTED"})[
+            0
+        ]
+        == rv.FAIL
+    )
+
+
 def test_real_registry_is_consistent():
     """Инвариант проекта: реестр, карточки, скиллы и декларации согласованы."""
     ctx = rv.Ctx(rv.ROOT)

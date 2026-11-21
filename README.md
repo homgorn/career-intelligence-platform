@@ -63,7 +63,7 @@ contracts are frozen.
 | Machine-readable assertions | 24 | Declarative, per-stage checks that a validator executes |
 | Agent skills | 24 | One skill per stage so an IDE loads the right card automatically |
 | Python tooling | 5 tools | Local check runner, validator, task selector, spec-index generator, skill installer |
-| Tests | 78 | Behaviour-level tests at the CLI and check seams |
+| Tests | 83 | Behaviour-level tests at the CLI and check seams |
 | Architecture documents | 5 | Architecture map, dependency map, P0 scope, risk register, glossary |
 | ADRs | 1 | `ADR-0001` — the operating model and its nine decisions |
 
@@ -97,7 +97,7 @@ career-intelligence-platform/
     ├── runbook_next.py                    # mechanical task selector
     ├── gen_spec_index.py                  # regenerates the spec index
     ├── install_skills.py                  # installs skills into the agent runtime
-    └── tests/                             # 78 tests
+    └── tests/                             # 83 tests
 ```
 
 ## Quick start
@@ -242,4 +242,5 @@ released, and it is not part of the P0 specification surface.
 ## License
 
 MIT — see [LICENSE](LICENSE). Published history stays MIT.
+
 

@@ -540,6 +540,45 @@ def check_markdown_links_resolve(ctx: Ctx, p: dict) -> tuple[str, str]:
     return PASS, f"проверено ссылок: {checked}"
 
 
+def check_min_occurrences(ctx: Ctx, p: dict) -> tuple[str, str]:
+    """Шаблон должен встречаться в файле не меньше N раз.
+
+    Нужен для содержательных проверок: «в реестре рисков не меньше 16 строк»,
+    «в карте контекстов — все 13 контекстов» и т. п.
+    """
+    rel, pattern, minimum = p["path"], p["pattern"], int(p.get("min", 1))
+    path = ctx.path(rel)
+    if not path.exists():
+        return FAIL, f"нет файла: {rel}"
+    try:
+        regex = re.compile(pattern, re.M)
+    except re.error as exc:
+        return FAIL, f"{rel}: некорректный шаблон ({exc})"
+    found = len(regex.findall(path.read_text(encoding="utf-8")))
+    if found < minimum:
+        return FAIL, f"{rel}: найдено {found}, ожидалось не меньше {minimum}"
+    return PASS, f"{rel}: {found} совпадений (мин. {minimum})"
+
+
+def check_frontmatter_equals(ctx: Ctx, p: dict) -> tuple[str, str]:
+    """Поле в YAML-frontmatter должно иметь ожидаемое значение."""
+    rel, field, expected = p["path"], p["field"], p["equals"]
+    path = ctx.path(rel)
+    if not path.exists():
+        return FAIL, f"нет файла: {rel}"
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        return FAIL, f"{rel}: нет frontmatter"
+    head = text.split("---", 2)[1] if text.count("---") >= 2 else ""
+    match = re.search(rf"(?m)^{re.escape(field)}:\s*(.+?)\s*$", head)
+    if not match:
+        return FAIL, f"{rel}: нет поля {field}"
+    value = match.group(1).strip().strip('"').strip("'")
+    if value != expected:
+        return FAIL, f"{rel}: {field}={value}, ожидалось {expected}"
+    return PASS, f"{rel}: {field}={value}"
+
+
 def check_next_task_single(ctx: Ctx, p: dict) -> tuple[str, str]:
     rel = p.get("path", "docs/tasks/NEXT_TASK.md")
     path = ctx.path(rel)
@@ -571,6 +610,8 @@ CHECKS = {
     "skills_cover_stages": check_skills_cover_stages,
     "assertions_cover_stages": check_assertions_cover_stages,
     "markdown_links_resolve": check_markdown_links_resolve,
+    "min_occurrences": check_min_occurrences,
+    "frontmatter_equals": check_frontmatter_equals,
     "manual": check_manual,
 }
 
