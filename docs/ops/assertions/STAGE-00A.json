@@ -3,7 +3,8 @@
   "depends_on": ["STAGE-00"],
   "inputs": [
     "docs/architecture/P0_SCOPE.md",
-    "docs/architecture/ARCHITECTURE_RISKS.md"
+    "docs/architecture/ARCHITECTURE_RISKS.md",
+    "docs/architecture/PILOT_OPTIONS.md"
   ],
   "outputs": [
     "docs/architecture/PILOT_DECISION.md",

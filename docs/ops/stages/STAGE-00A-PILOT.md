@@ -17,6 +17,7 @@
 
 - `docs/architecture/P0_SCOPE.md`, `ARCHITECTURE_RISKS.md`, `OPEN QUESTIONS`
   из STAGE-00.
+- `docs/architecture/PILOT_OPTIONS.md` — кандидаты пилота с явными неизвестными.
 - `20_OPEN_QUESTIONS_AND_RESEARCH_BACKLOG.md` — 15 открытых вопросов.
 - `04_TAXONOMY_SPEC.md` — стратегия crosswalk (O*NET / ESCO / местная).
 - `12_LEGAL_COMPLIANCE_SPEC.md` — от выбранной юрисдикции зависит объём

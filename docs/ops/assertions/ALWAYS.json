@@ -24,6 +24,20 @@
     {"kind": "stage_registry_consistent"},
     {"kind": "skills_cover_stages"},
     {"kind": "assertions_cover_stages"},
-    {"kind": "markdown_links_resolve"}
+    {"kind": "markdown_links_resolve"},
+    {
+      "kind": "canonical_events",
+      "path": "docs/architecture/CONTRACT_TRACEABILITY.md"
+    },
+    {
+      "kind": "terms_present",
+      "path": "docs/architecture/CONTRACT_TRACEABILITY.md",
+      "terms": [
+        "Контракты, которых в архиве нет",
+        "WorkRecipe",
+        "PolicyDecision",
+        "Consent"
+      ]
+    }
   ]
 }
