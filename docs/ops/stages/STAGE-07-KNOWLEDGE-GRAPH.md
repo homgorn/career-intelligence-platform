@@ -40,6 +40,14 @@ Graph — derived projection из authoritative data, если нет отдел
 4. Consistency tests.
 5. Оценить, нужен ли отдельный graph DB.
 
+## Outputs
+
+- `docs/architecture/GRAPH-PROJECTION.md` — схема графа, правила projection,
+  отличие asserted от inferred.
+- `docs/decisions/ADR-XXXX-graph-storage.md` — выбор между PostgreSQL graph
+  tables и отдельной graph DB, с обоснованием.
+- Traversal queries и consistency tests в коде.
+
 ## Definition of Done
 
 - [ ] Asserted и inferred связи различимы в схеме.

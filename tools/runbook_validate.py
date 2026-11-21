@@ -343,6 +343,203 @@ def check_manual(ctx: Ctx, p: dict) -> tuple[str, str]:
     return SKIP, p.get("note", "требует человека")
 
 
+def _stage_rows(ctx: Ctx) -> list[dict]:
+    """Реестр этапов из STAGE-INDEX.csv. Кэш по (mtime, size)."""
+    path = ctx.path("docs/ops/STAGE-INDEX.csv")
+    if not path.exists():
+        return []
+    stat = path.stat()
+    key = ("stage_rows", stat.st_mtime_ns, stat.st_size)
+    if key in ctx.cache:
+        return ctx.cache[key]  # type: ignore[return-value]
+    lines = [ln for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    if not lines:
+        return []
+    header = [h.strip() for h in lines[0].split(",")]
+    rows = []
+    for line in lines[1:]:
+        parts = [p.strip() for p in line.split(",")]
+        if len(parts) == len(header):
+            rows.append(dict(zip(header, parts, strict=False)))
+    ctx.cache[key] = rows
+    return rows
+
+
+def check_stage_registry_consistent(ctx: Ctx, p: dict) -> tuple[str, str]:
+    """Каждый этап реестра имеет карточку с обязательными разделами.
+
+    Ловит дрейф при добавлении этапа: запись в реестре без карточки,
+    карточка без записи, карточка без обязательных разделов.
+    """
+    rows = _stage_rows(ctx)
+    if not rows:
+        return FAIL, "docs/ops/STAGE-INDEX.csv отсутствует или пуст"
+    stages_dir = ctx.path("docs/ops/stages")
+    if not stages_dir.is_dir():
+        return FAIL, "нет каталога docs/ops/stages"
+
+    required = [
+        "## Trigger",
+        "## Inputs",
+        "## Outputs",
+        "## Definition of Done",
+        "## HARD STOP",
+        "## Rollback",
+        "## Промпт для IDE",
+    ]
+    card_files = {f.name: f for f in stages_dir.glob("*.md")}
+    problems = []
+    seen = set()
+
+    for row in rows:
+        sid = row.get("stage_id", "")
+        if not sid or sid == "stage_id":
+            continue
+        matches = [name for name in card_files if name.startswith(f"{sid}-")]
+        if not matches:
+            problems.append(f"нет карточки для {sid}")
+            continue
+        for name in matches:
+            seen.add(name)
+            text = card_files[name].read_text(encoding="utf-8")
+            missing = [h for h in required if h not in text]
+            if missing:
+                problems.append(f"{name}: нет разделов {', '.join(missing)}")
+
+    orphans = sorted(set(card_files) - seen)
+    if orphans:
+        problems.append(f"карточки вне реестра: {', '.join(orphans[:4])}")
+
+    if problems:
+        return FAIL, "; ".join(problems[:6])
+    return PASS, f"{len(rows)} этапов, карточки и разделы на месте"
+
+
+def check_skills_cover_stages(ctx: Ctx, p: dict) -> tuple[str, str]:
+    """Каждый этап имеет скилл, и frontmatter `name` совпадает с именем папки."""
+    rows = _stage_rows(ctx)
+    if not rows:
+        return FAIL, "docs/ops/STAGE-INDEX.csv отсутствует или пуст"
+    skills_dir = ctx.path("skills")
+    if not skills_dir.is_dir():
+        return FAIL, "нет каталога skills"
+
+    skill_dirs = [d for d in skills_dir.iterdir() if d.is_dir()]
+    problems = []
+    for row in rows:
+        sid = row.get("stage_id", "")
+        if not sid or sid == "stage_id":
+            continue
+        matches = [d for d in skill_dirs if d.name.startswith(f"ci-{sid.lower()}-")]
+        if not matches:
+            problems.append(f"нет скилла для {sid}")
+
+    for d in skill_dirs:
+        skill_md = d / "SKILL.md"
+        if not skill_md.exists():
+            problems.append(f"{d.name}: нет SKILL.md")
+            continue
+        head = skill_md.read_text(encoding="utf-8")[:400]
+        if f"name: {d.name}" not in head:
+            problems.append(f"{d.name}: frontmatter name не совпадает с папкой")
+
+    if problems:
+        return FAIL, "; ".join(problems[:6])
+    return PASS, f"{len(rows)} этапов, {len(skill_dirs)} скиллов согласованы"
+
+
+def check_assertions_cover_stages(ctx: Ctx, p: dict) -> tuple[str, str]:
+    """Каждый этап реестра имеет декларацию проверок с совпадающим полем stage."""
+    rows = _stage_rows(ctx)
+    if not rows:
+        return FAIL, "docs/ops/STAGE-INDEX.csv отсутствует или пуст"
+    assertions = ctx.path("docs/ops/assertions")
+    if not assertions.is_dir():
+        return FAIL, "нет каталога docs/ops/assertions"
+
+    problems = []
+    declared = {}
+    for path in assertions.glob("*.json"):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            problems.append(f"{path.name}: невалидный JSON ({exc})")
+            continue
+        stage = data.get("stage")
+        if stage:
+            declared[stage] = path.name
+
+    for row in rows:
+        sid = row.get("stage_id", "")
+        if not sid or sid == "stage_id":
+            continue
+        if sid not in declared:
+            problems.append(f"нет декларации для {sid}")
+
+    if problems:
+        return FAIL, "; ".join(problems[:6])
+    return PASS, f"{len(declared)} деклараций покрывают реестр"
+
+
+def check_markdown_links_resolve(ctx: Ctx, p: dict) -> tuple[str, str]:
+    """Относительные ссылки в markdown должны указывать на существующие файлы.
+
+    Проверяются только документы проекта (по умолчанию), не архив: архив —
+    read-only источник и его внутренние ссылки не наша ответственность.
+    """
+    paths = p.get("paths") or [
+        "README.md",
+        "README.ru.md",
+        "CONTRIBUTING.md",
+        "AGENTS.md",
+        "CHANGELOG.md",
+        "SECURITY.md",
+        "CODE_OF_CONDUCT.md",
+        "docs",
+    ]
+    # Один уровень вложенности — чтобы ловить бейджи вида [![alt](img)](target).
+    link_re = re.compile(r"\[(?:[^\[\]]|\[[^\]]*\])*\]\(([^)]+)\)")
+    problems = []
+    checked = 0
+
+    files: list[Path] = []
+    for rel in paths:
+        candidate = ctx.path(rel)
+        if candidate.is_dir():
+            files.extend(sorted(candidate.rglob("*.md")))
+        elif candidate.exists():
+            files.append(candidate)
+
+    # Ссылки внутри кода — не ссылки: вырезаем блоки и inline-код до разбора.
+    fenced = re.compile(r"```.*?```", re.S)
+    inline_code = re.compile(r"`[^`\n]*`")
+
+    for path in files:
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        text = fenced.sub("", text)
+        text = inline_code.sub("", text)
+        for raw in link_re.findall(text):
+            target = raw.strip().split(" ")[0].strip("<>")
+            if not target or target.startswith(("http://", "https://", "mailto:", "#")):
+                continue
+            target = target.split("#", 1)[0]
+            if not target:
+                continue
+            checked += 1
+            resolved = (path.parent / target).resolve()
+            if not resolved.exists():
+                rel_file = path.relative_to(ctx.root).as_posix()
+                problems.append(f"{rel_file} → {raw}")
+
+    if problems:
+        head = "; ".join(problems[:5])
+        more = f" (и ещё {len(problems) - 5})" if len(problems) > 5 else ""
+        return FAIL, f"битые ссылки: {head}{more}"
+    return PASS, f"проверено ссылок: {checked}"
+
+
 def check_next_task_single(ctx: Ctx, p: dict) -> tuple[str, str]:
     rel = p.get("path", "docs/tasks/NEXT_TASK.md")
     path = ctx.path(rel)
@@ -370,6 +567,10 @@ CHECKS = {
     "human_signed": check_human_signed,
     "gate_status": check_gate_status,
     "next_task_single": check_next_task_single,
+    "stage_registry_consistent": check_stage_registry_consistent,
+    "skills_cover_stages": check_skills_cover_stages,
+    "assertions_cover_stages": check_assertions_cover_stages,
+    "markdown_links_resolve": check_markdown_links_resolve,
     "manual": check_manual,
 }
 

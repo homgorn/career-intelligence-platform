@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Lint, test and stage gates
+    name: Local check runner (lint, tests, stage gates)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,33 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install "ruff>=0.6" "pytest>=8.0"
 
-      - name: Lint
-        run: ruff check tools
-
-      - name: Format check
-        run: ruff format --check tools
-
-      - name: Unit tests
-        run: pytest tools/tests
-
-      - name: Spec index is in sync with the archive
-        run: |
-          python tools/gen_spec_index.py
-          git diff --exit-code -- docs/specs/
-
-      - name: Stage gate — project invariants
-        run: python tools/runbook_validate.py --stage ALWAYS
-
-      - name: Stage gate — STAGE-00 audit
-        run: python tools/runbook_validate.py --stage STAGE-00
-
-      - name: Selector must not crash
-        run: |
-          set +e
-          python tools/runbook_next.py
-          code=$?
-          set -e
-          if [ "$code" -ne 0 ] && [ "$code" -ne 2 ]; then
-            echo "Selector exited with $code (expected 0 or 2)"
-            exit 1
-          fi
+      # Единственный источник истины: та же команда, что запускается локально.
+      # Дублировать шаги в YAML нельзя — иначе локальная и облачная проверки
+      # разъедутся и «зелёное локально» перестанет что-либо значить.
+      - name: Run project checks
+        run: python tools/check.py --skip-info

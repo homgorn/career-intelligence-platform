@@ -19,6 +19,11 @@
     {"kind": "file_exists", "path": "tools/runbook_validate.py"},
     {"kind": "file_exists", "path": "tools/runbook_next.py"},
     {"kind": "file_exists", "path": "tools/gen_spec_index.py"},
-    {"kind": "json_valid", "path": "docs/specs/SPEC_STATUS.json"}
+    {"kind": "file_exists", "path": "tools/check.py"},
+    {"kind": "json_valid", "path": "docs/specs/SPEC_STATUS.json"},
+    {"kind": "stage_registry_consistent"},
+    {"kind": "skills_cover_stages"},
+    {"kind": "assertions_cover_stages"},
+    {"kind": "markdown_links_resolve"}
   ]
 }

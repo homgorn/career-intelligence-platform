@@ -235,6 +235,191 @@ def test_manual_check_is_skip_with_note(ctx):
     assert "человек" in detail
 
 
+CARD_BODY = """# STAGE
+
+## Trigger
+
+x
+
+## Inputs
+
+x
+
+## Outputs
+
+x
+
+## Definition of Done
+
+- [ ] x
+
+## HARD STOP
+
+x
+
+## Rollback
+
+x
+
+## Промпт для IDE
+
+```text
+x
+```
+"""
+
+CSV_HEADER = "stage_id,name,former_prompt,archive_task,depends_on,gate,status\n"
+
+
+def seed_registry(ctx, stages=("STAGE-00", "STAGE-01")) -> None:
+    write(
+        ctx.path("docs/ops/STAGE-INDEX.csv"),
+        CSV_HEADER + "".join(f"{s},Name,-,-,-,stage,pending\n" for s in stages),
+    )
+    for s in stages:
+        write(ctx.path(f"docs/ops/stages/{s}-DEMO.md"), CARD_BODY)
+        write(
+            ctx.path(f"skills/ci-{s.lower()}-demo/SKILL.md"),
+            f"---\nname: ci-{s.lower()}-demo\ndescription: demo\n---\n\nbody\n",
+        )
+        write(
+            ctx.path(f"docs/ops/assertions/{s}.json"),
+            json.dumps({"stage": s, "depends_on": [], "inputs": [], "outputs": [], "checks": []}),
+        )
+
+
+def test_stage_registry_consistent_pass(ctx):
+    seed_registry(ctx)
+    status, detail = rv.check_stage_registry_consistent(ctx, {})
+    assert status == rv.PASS, detail
+
+
+def test_stage_registry_flags_missing_card(ctx):
+    seed_registry(ctx)
+    ctx.path("docs/ops/stages/STAGE-01-DEMO.md").unlink()
+    status, detail = rv.check_stage_registry_consistent(ctx, {})
+    assert status == rv.FAIL
+    assert "STAGE-01" in detail
+
+
+def test_stage_registry_flags_missing_section(ctx):
+    seed_registry(ctx)
+    write(
+        ctx.path("docs/ops/stages/STAGE-01-DEMO.md"), CARD_BODY.replace("## Outputs", "## Выходы")
+    )
+    status, detail = rv.check_stage_registry_consistent(ctx, {})
+    assert status == rv.FAIL
+    assert "## Outputs" in detail
+
+
+def test_stage_registry_flags_orphan_card(ctx):
+    seed_registry(ctx)
+    write(ctx.path("docs/ops/stages/STAGE-99-GHOST.md"), CARD_BODY)
+    status, detail = rv.check_stage_registry_consistent(ctx, {})
+    assert status == rv.FAIL
+    assert "вне реестра" in detail
+
+
+def test_skills_cover_stages_pass(ctx):
+    seed_registry(ctx)
+    status, detail = rv.check_skills_cover_stages(ctx, {})
+    assert status == rv.PASS, detail
+
+
+def test_skills_flags_missing_skill(ctx):
+    seed_registry(ctx)
+    import shutil
+
+    shutil.rmtree(ctx.path("skills/ci-stage-01-demo"))
+    status, detail = rv.check_skills_cover_stages(ctx, {})
+    assert status == rv.FAIL
+    assert "STAGE-01" in detail
+
+
+def test_skills_flags_frontmatter_mismatch(ctx):
+    seed_registry(ctx)
+    write(
+        ctx.path("skills/ci-stage-00-demo/SKILL.md"),
+        "---\nname: wrong-name\ndescription: demo\n---\n",
+    )
+    status, detail = rv.check_skills_cover_stages(ctx, {})
+    assert status == rv.FAIL
+    assert "frontmatter" in detail
+
+
+def test_assertions_cover_stages_pass(ctx):
+    seed_registry(ctx)
+    status, detail = rv.check_assertions_cover_stages(ctx, {})
+    assert status == rv.PASS, detail
+
+
+def test_assertions_flags_missing_declaration(ctx):
+    seed_registry(ctx)
+    ctx.path("docs/ops/assertions/STAGE-01.json").unlink()
+    status, detail = rv.check_assertions_cover_stages(ctx, {})
+    assert status == rv.FAIL
+    assert "STAGE-01" in detail
+
+
+def test_markdown_links_resolve_pass(ctx):
+    write(ctx.path("docs/guide.md"), "target")
+    write(ctx.path("README.md"), "См. [гид](docs/guide.md) и [внешнее](https://example.org).\n")
+    status, detail = rv.check_markdown_links_resolve(ctx, {"paths": ["README.md", "docs"]})
+    assert status == rv.PASS, detail
+
+
+def test_markdown_links_resolve_flags_missing_target(ctx):
+    write(ctx.path("docs/guide.md"), "target")
+    write(ctx.path("README.md"), "См. [гид](docs/guide.md) и [пропажу](docs/gone.md).\n")
+    status, detail = rv.check_markdown_links_resolve(ctx, {"paths": ["README.md", "docs"]})
+    assert status == rv.FAIL
+    assert "docs/gone.md" in detail
+    assert "README.md" in detail
+
+
+def test_markdown_links_resolve_ignores_anchors_and_mailto(ctx):
+    write(ctx.path("README.md"), "[якорь](#section) [почта](mailto:a@b.c) [внешнее](https://x.y)\n")
+    status, detail = rv.check_markdown_links_resolve(ctx, {"paths": ["README.md"]})
+    assert status == rv.PASS
+    assert "проверено ссылок: 0" in detail
+
+
+def test_markdown_links_resolve_handles_badge_links(ctx):
+    write(ctx.path("docs/LICENSE.md"), "license")
+    write(ctx.path("README.md"), "[![badge](https://img.example/b.svg)](docs/LICENSE.md)\n")
+    status, detail = rv.check_markdown_links_resolve(ctx, {"paths": ["README.md"]})
+    assert status == rv.PASS, detail
+
+
+def test_markdown_links_resolve_ignores_anchor_suffix(ctx):
+    write(ctx.path("docs/ADR-0001.md"), "adr")
+    write(ctx.path("README.md"), "[решение](docs/ADR-0001.md#контекст)\n")
+    status, detail = rv.check_markdown_links_resolve(ctx, {"paths": ["README.md"]})
+    assert status == rv.PASS, detail
+
+
+def test_markdown_links_resolve_ignores_links_in_code(ctx):
+    write(
+        ctx.path("README.md"),
+        "Пример: `[битая](docs/gone.md)` и блок:\n\n```md\n[тоже битая](docs/gone.md)\n```\n",
+    )
+    status, detail = rv.check_markdown_links_resolve(ctx, {"paths": ["README.md"]})
+    assert status == rv.PASS, detail
+    assert "проверено ссылок: 0" in detail
+
+
+def test_real_registry_is_consistent():
+    """Инвариант проекта: реестр, карточки, скиллы и декларации согласованы."""
+    ctx = rv.Ctx(rv.ROOT)
+    for check in (
+        rv.check_stage_registry_consistent,
+        rv.check_skills_cover_stages,
+        rv.check_assertions_cover_stages,
+    ):
+        status, detail = check(ctx, {})
+        assert status == rv.PASS, f"{check.__name__}: {detail}"
+
+
 def test_real_archive_hashes_are_current():
     """Инвариант проекта: хэши в TSV совпадают с диском."""
     status, _ = rv.check_archive_hashes(rv.Ctx(rv.ROOT), {})

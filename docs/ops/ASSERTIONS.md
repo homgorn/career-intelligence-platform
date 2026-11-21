@@ -42,6 +42,9 @@
 | `human_signed` | документ подписан человеком (`signed_by`) |
 | `gate_status` | в gate-отчёте есть `STATUS:` |
 | `next_task_single` | в NEXT_TASK.md ровно одна задача |
+| `stage_registry_consistent` | каждый этап реестра имеет карточку с обязательными разделами; нет карточек вне реестра |
+| `skills_cover_stages` | каждый этап имеет скилл, `name` в frontmatter совпадает с папкой |
+| `assertions_cover_stages` | каждый этап реестра имеет декларацию проверок |
 
 ## Статусы
 
