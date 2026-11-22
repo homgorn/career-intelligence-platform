@@ -86,7 +86,9 @@ def test_build_steps_marks_expensive_steps_quick():
 
 def test_selector_step_allows_blocked_exit():
     by_name = {s.name: s for s in check.build_steps(PY)}
-    assert 2 in by_name["selector заблокирован пилотом"].allow_exit
+    allowed = by_name["selector даёт валидный исход"].allow_exit
+    assert 2 in allowed, "заблокированный селектор — валидный исход"
+    assert 0 in allowed, "селектор задачи-пилота тоже валиден"
 
 
 def test_render_text_marks_failures_and_summary():

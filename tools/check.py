@@ -103,8 +103,9 @@ def build_steps(py: str) -> list[Step]:
             [py, "tools/runbook_validate.py", "--stage", "STAGE-00"],
             quick=True,
         ),
-        # Селектор обязан быть заблокирован до подписи пилота: код 2 — норма.
-        Step("selector заблокирован пилотом", [py, "tools/runbook_next.py"], allow_exit=(2,)),
+        # Селектор либо блокирован до подписи пилота (2), либо ведёт на задачу,
+        # которая сама создаёт пилот (0). Оба исхода валидны.
+        Step("selector даёт валидный исход", [py, "tools/runbook_next.py"], allow_exit=(0, 2)),
     ]
 
 

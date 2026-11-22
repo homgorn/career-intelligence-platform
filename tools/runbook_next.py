@@ -94,33 +94,39 @@ def main() -> int:
     if gates["P1"] == "PASS":
         allowed.append("P2")
 
-    blocked_reason = None
-    if not signed:
-        blocked_reason = ("BLOCKED_ON_PILOT", detail)
-
     eligible = []
     reasons: dict[str, str] = {}
-    if not blocked_reason:
-        for task in tasks:
-            tid = task["id"]
-            if task.get("status") not in ("PENDING", None, ""):
-                reasons[tid] = f"статус {task.get('status')}"
-                continue
-            if task.get("priority") not in allowed:
-                reasons[tid] = f"priority {task.get('priority')} закрыт gate'ом"
-                continue
-            unfinished = [
-                d for d in task.get("depends_on", []) if by_id.get(d, {}).get("status") != "DONE"
-            ]
-            if unfinished:
-                reasons[tid] = f"не завершены зависимости: {', '.join(unfinished)}"
-                continue
-            value = float(task.get("value_score") or 0)
-            risk = float(task.get("risk_score") or 0)
-            cost = float(task.get("cost_score") or 0)
-            score = value - risk - cost
-            needs_priority = value == 0 and risk == 0 and cost == 0
-            eligible.append((score, tid, needs_priority))
+    # Задача, которая сама создаёт решение по пилоту, не может этим решением
+    # блокироваться — иначе цикл: «выбери пилот, но сначала подпиши пилот».
+    pilot_task_ids = {t["id"] for t in tasks if t.get("produces_pilot_decision")}
+    blocked_reason = None
+    if not signed and not pilot_task_ids:
+        blocked_reason = ("BLOCKED_ON_PILOT", detail)
+
+    for task in tasks:
+        tid = task["id"]
+        produces_pilot = bool(task.get("produces_pilot_decision"))
+        if not signed and not produces_pilot:
+            reasons[tid] = "ждёт подписанного PILOT_DECISION"
+            continue
+        if task.get("status") not in ("PENDING", None, ""):
+            reasons[tid] = f"статус {task.get('status')}"
+            continue
+        if task.get("priority") not in allowed:
+            reasons[tid] = f"priority {task.get('priority')} закрыт gate'ом"
+            continue
+        unfinished = [
+            d for d in task.get("depends_on", []) if by_id.get(d, {}).get("status") != "DONE"
+        ]
+        if unfinished:
+            reasons[tid] = f"не завершены зависимости: {', '.join(unfinished)}"
+            continue
+        value = float(task.get("value_score") or 0)
+        risk = float(task.get("risk_score") or 0)
+        cost = float(task.get("cost_score") or 0)
+        score = value - risk - cost
+        needs_priority = value == 0 and risk == 0 and cost == 0
+        eligible.append((score, tid, needs_priority))
 
     eligible.sort(
         key=lambda item: (
@@ -149,6 +155,7 @@ def main() -> int:
             "task_id": tid,
             "score": score,
             "needs_human_priority": needs_priority,
+            "produces_pilot_decision": bool(by_id[tid].get("produces_pilot_decision")),
             **{k: by_id[tid].get(k) for k in ("title", "priority", "depends_on", "stage")},
         }
     else:
@@ -180,6 +187,9 @@ def main() -> int:
             out(f"  score (value-risk-cost): {sel['score']}")
             if sel["needs_human_priority"]:
                 out("  [!] value/risk/cost не оценены — приоритет требует человека")
+            if sel["produces_pilot_decision"]:
+                out("  [i] это задача, создающая PILOT_DECISION: она не требует")
+                out("      уже подписанного пилота, решение принимает владелец")
             out("")
             out("WHY NOW: единственная задача с закрытыми зависимостями и разрешённым")
             out("приоритетом; правила 1–8 применены механически.")

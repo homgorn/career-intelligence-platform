@@ -67,6 +67,27 @@ def task(tid, priority="P0", status="PENDING", deps=(), **extra):
     return base
 
 
+def test_pilot_task_is_selectable_without_signature(env, monkeypatch, capsys):
+    """Задача, создающая PILOT_DECISION, не блокируется отсутствием пилота."""
+    env.backlog(
+        [
+            task("TASK-P0-001", produces_pilot_decision=True),
+            task("TASK-P0-002", deps=["TASK-P0-001"], value_score=100),
+        ]
+    )
+    code, out = run_cli(monkeypatch, capsys)
+    assert code == 0
+    assert "TASK: TASK-P0-001" in out
+    assert "создающая PILOT_DECISION" in out
+
+
+def test_without_pilot_task_everything_blocks(env, monkeypatch, capsys):
+    env.backlog([task("TASK-P0-002")])
+    code, out = run_cli(monkeypatch, capsys)
+    assert code == 2
+    assert "BLOCKED_ON_PILOT" in out
+
+
 def test_missing_pilot_blocks(env, monkeypatch, capsys):
     env.backlog([task("TASK-P0-001")])
     code, out = run_cli(monkeypatch, capsys)
