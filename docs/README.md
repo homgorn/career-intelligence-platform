@@ -13,8 +13,15 @@
 | `ops/STAGE-STATUS.md` | журнал этапов и задач |
 | `specs/SPEC_INDEX.md` | канон спецификаций, конфликты, статусы |
 | `specs/SPEC_INDEX_DATA.tsv` | все файлы архива с sha256 |
-| `architecture/` | карты архитектуры, PILOT_DECISION, glossary |
-| `decisions/` | ADR |
+| `architecture/MASTER_ARCHITECTURE_MAP.md` | контексты, system of record, границы |
+| `architecture/DEPENDENCY_MAP.md` | зависимости подсистем и порядок P0 |
+| `architecture/P0_SCOPE.md` | что в P0, что отложено и почему |
+| `architecture/ARCHITECTURE_RISKS.md` | 16 рисков с причинами и действиями |
+| `architecture/OPEN_QUESTIONS.md` | реестр неопределённостей с владельцами |
+| `architecture/CONTRACT_TRACEABILITY.md` | спека → артефакт → производитель → потребитель |
+| `architecture/PILOT_OPTIONS.md` | кандидаты пилота (вход для STAGE-00A) |
+| `architecture/GLOSSARY.md` | русский термин → английский канон |
+| `decisions/` | ADR и реестр решений |
 | `contracts/` | API, events, domain контракты |
 | `tasks/` | бэклог и карточки задач |
 | `gates/` | отчёты gate |
