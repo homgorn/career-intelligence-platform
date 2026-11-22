@@ -27,6 +27,17 @@
     {"kind": "installed_skills_in_sync"},
     {"kind": "markdown_links_resolve"},
     {
+      "kind": "min_occurrences",
+      "path": "docs/architecture/OPEN_QUESTIONS.md",
+      "pattern": "^\\|\\s*Q-\\d+",
+      "min": 15
+    },
+    {
+      "kind": "terms_present",
+      "path": "docs/architecture/OPEN_QUESTIONS.md",
+      "terms": ["Владелец", "BLOCKED_ON_PILOT", "ANSWERED"]
+    },
+    {
       "kind": "canonical_events",
       "path": "docs/architecture/CONTRACT_TRACEABILITY.md"
     },
