@@ -464,6 +464,63 @@ def test_frontmatter_equals_missing_field_and_block(ctx):
     )
 
 
+def test_installed_skills_skip_when_absent(ctx, monkeypatch, tmp_path):
+    import install_skills as isk
+
+    monkeypatch.setattr(isk, "target_dir", lambda: tmp_path / "nowhere")
+    status, detail = rv.check_installed_skills_in_sync(ctx, {})
+    assert status == rv.SKIP
+    assert "отсутствует" in detail
+
+
+def test_installed_skills_pass_when_in_sync(ctx, monkeypatch, tmp_path):
+    import install_skills as isk
+
+    src = tmp_path / "repo-skills"
+    write(src / "ci-demo" / "SKILL.md", "---\nname: ci-demo\n---\n")
+    dest = tmp_path / "installed"
+    write(dest / "ci-demo" / "SKILL.md", "---\nname: ci-demo\n---\n")
+
+    monkeypatch.setattr(isk, "project_skills", lambda: [src / "ci-demo"])
+    monkeypatch.setattr(isk, "target_dir", lambda: dest)
+
+    status, detail = rv.check_installed_skills_in_sync(ctx, {})
+    assert status == rv.PASS, detail
+
+
+def test_installed_skills_detect_stale_copy(ctx, monkeypatch, tmp_path):
+    import install_skills as isk
+
+    src = tmp_path / "repo-skills"
+    write(src / "ci-demo" / "SKILL.md", "new content")
+    dest = tmp_path / "installed"
+    write(dest / "ci-demo" / "SKILL.md", "old content")
+
+    monkeypatch.setattr(isk, "project_skills", lambda: [src / "ci-demo"])
+    monkeypatch.setattr(isk, "target_dir", lambda: dest)
+
+    status, detail = rv.check_installed_skills_in_sync(ctx, {})
+    assert status == rv.FAIL
+    assert "устарел" in detail
+    assert "install_skills.py" in detail
+
+
+def test_installed_skills_detect_missing_skill(ctx, monkeypatch, tmp_path):
+    import install_skills as isk
+
+    src = tmp_path / "repo-skills"
+    write(src / "ci-demo" / "SKILL.md", "x")
+    dest = tmp_path / "installed"
+    dest.mkdir()
+
+    monkeypatch.setattr(isk, "project_skills", lambda: [src / "ci-demo"])
+    monkeypatch.setattr(isk, "target_dir", lambda: dest)
+
+    status, detail = rv.check_installed_skills_in_sync(ctx, {})
+    assert status == rv.FAIL
+    assert "не установлен" in detail
+
+
 def test_real_registry_is_consistent():
     """Инвариант проекта: реестр, карточки, скиллы и декларации согласованы."""
     ctx = rv.Ctx(rv.ROOT)

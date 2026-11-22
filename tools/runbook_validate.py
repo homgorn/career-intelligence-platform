@@ -579,6 +579,44 @@ def check_frontmatter_equals(ctx: Ctx, p: dict) -> tuple[str, str]:
     return PASS, f"{rel}: {field}={value}"
 
 
+def check_installed_skills_in_sync(ctx: Ctx, p: dict) -> tuple[str, str]:
+    """Установленные скиллы должны совпадать с репозиторием.
+
+    Если рабочий каталог агента отсутствует (например, CI), проверка
+    пропускается: там скиллы не устанавливаются.
+    """
+    try:
+        import install_skills as isk
+    except Exception as exc:  # pragma: no cover - защита от поломки импорта
+        return SKIP, f"install_skills недоступен: {exc}"
+
+    dest = isk.target_dir()
+    if not dest.is_dir():
+        return SKIP, f"каталог скиллов отсутствует: {dest}"
+
+    problems = []
+    checked = 0
+    for skill in isk.project_skills():
+        target = dest / skill.name
+        if not target.is_dir():
+            problems.append(f"не установлен: {skill.name}")
+            continue
+        for src_file in skill.rglob("*"):
+            if not src_file.is_file():
+                continue
+            rel = src_file.relative_to(skill)
+            dst_file = target / rel
+            checked += 1
+            if not dst_file.exists():
+                problems.append(f"{skill.name}/{rel.as_posix()}: нет в каталоге")
+            elif isk.digest(src_file) != isk.digest(dst_file):
+                problems.append(f"{skill.name}/{rel.as_posix()}: устарел")
+
+    if problems:
+        return FAIL, "; ".join(problems[:5]) + " — запусти python tools/install_skills.py"
+    return PASS, f"скиллы синхронны ({checked} файлов)"
+
+
 def check_next_task_single(ctx: Ctx, p: dict) -> tuple[str, str]:
     rel = p.get("path", "docs/tasks/NEXT_TASK.md")
     path = ctx.path(rel)
@@ -612,6 +650,7 @@ CHECKS = {
     "markdown_links_resolve": check_markdown_links_resolve,
     "min_occurrences": check_min_occurrences,
     "frontmatter_equals": check_frontmatter_equals,
+    "installed_skills_in_sync": check_installed_skills_in_sync,
     "manual": check_manual,
 }
 

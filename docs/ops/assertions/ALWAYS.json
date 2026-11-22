@@ -24,6 +24,7 @@
     {"kind": "stage_registry_consistent"},
     {"kind": "skills_cover_stages"},
     {"kind": "assertions_cover_stages"},
+    {"kind": "installed_skills_in_sync"},
     {"kind": "markdown_links_resolve"},
     {
       "kind": "canonical_events",
