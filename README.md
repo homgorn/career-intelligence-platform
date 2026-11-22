@@ -197,8 +197,10 @@ not unlock P1.
 | `STAGE-00A` pilot decision | Waiting on the owner: ICP, profession, workflow, country, thresholds |
 | `STAGE-01`…`STAGE-19` | Not started |
 
-The next stage requires a human decision and cannot be automated. The selector
-reports this explicitly:
+The next task is already selected mechanically and written down in
+[`docs/tasks/NEXT_TASK.md`](docs/tasks/NEXT_TASK.md): `TASK-P0-001`, the pilot
+decision. It is the only task that does not require an already signed pilot —
+it creates one. Everything else reports `BLOCKED_ON_PILOT`:
 
 ```
 === Селектор следующей задачи ===
@@ -206,8 +208,13 @@ reports this explicitly:
 Gate: P0=None P1=None P2=None
 Разрешённые приоритеты: P0
 
-[BLOCKED] BLOCKED_ON_PILOT: нет docs/architecture/PILOT_DECISION.md
+TASK: TASK-P0-001 — Choose ICP + profession + measurable workflow
+  [i] это задача, создающая PILOT_DECISION: она не требует
+      уже подписанного пилота, решение принимает владелец
 ```
+
+Candidate pilots, their unknowns and the cheap way to test them are in
+[`docs/architecture/PILOT_OPTIONS.md`](docs/architecture/PILOT_OPTIONS.md).
 
 ## Documentation map
 
